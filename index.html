@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Line98</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<script type="text/javascript" src="Game.js"></script>
+	<script type="text/javascript" src="Button.js"></script>
+	<script type="text/javascript" src="MenuScene.js"></script>
+	<script type="text/javascript" src="Ball.js"></script>
+	<script type="text/javascript" src="Cell.js"></script>
+
+	<canvas id="canvas" height="600" width="450"> </canvas>
+	<script type="text/javascript" >
+		var canvas = document.getElementById("canvas");
+		var context = canvas.getContext("2d");
+		var scene = new MenuScene();
+		setInterval(()=>{
+			context.clearRect(0,0,600,450);
+			scene.update();
+			scene.draw();
+		},1/2);
+
+	</script> 	
+	
+</body>
+
+</html>
