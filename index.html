@@ -17,10 +17,12 @@
 		var context = canvas.getContext("2d");
 		var scene = new MenuScene();
 		setInterval(()=>{
-			context.clearRect(0,0,600,450);
+			
+  			context.clearRect(0, 0, canvas.width, canvas.height);
+      
 			scene.update();
 			scene.draw();
-		},1/2);
+		},20);
 
 	</script> 	
 	
