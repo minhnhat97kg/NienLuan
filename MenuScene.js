@@ -13,8 +13,8 @@ function MenuScene(){
         return pos.x > rect.x && pos.x < rect.x+rect.w && pos.y < rect.y+rect.h && pos.y > rect.y
     }
     this.init = function(){
-        var play = new Button(50,50,80,50,"PLAY","play_button");
-        var exit = new Button(50,120,80,50,"EXIT","exit_button");
+        var play = new Button(canvas.width/4,canvas.height/8,200,50,"PLAY GAME","play_button");
+        var exit = new Button(canvas.width/4,canvas.height*2/8,200,50,"EXIT","exit_button");
         this.components.push(play);
         this.components.push(exit);
         canvas.addEventListener("click",function click(event){

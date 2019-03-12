@@ -7,7 +7,7 @@ function Cell(x,y){
 	this.h = 50;
 	this.w = 50;
 	this.isMarked = false;
-	
+	var root = this;
 	this.update = function(){
 		//TOdo
 	}
@@ -18,12 +18,17 @@ function Cell(x,y){
 			
 		if(!this.isEmpty())
 			this.ball.draw();
-		context.globalCompositeOperation='destination-over'
-		context.fillStyle = this.isMarked?'#707070':'lightgrey';
-		context.fillRect(this.x, this.y, 48, 48); 
-		context.fill();
-
-		
+		context.globalCompositeOperation='destination-over';
+		if(this.isMarked==true){
+			context.beginPath();
+			context.fillStyle = "#92aa96";
+			context.fillRect(this.x, this.y, 49, 49); 
+			context.fill();
+		}else{
+			context.strokeStyle = '#dedfe0'
+			context.rect(this.x, this.y, 48, 48); 
+			context.stroke();
+		}
 		
 	}
 	this.setMark = function(bol){
@@ -44,10 +49,13 @@ function Cell(x,y){
 		this.ball.setNotChild();
 	}
 	this.removeBall = function(){
+		this.ball.setDestroyState();
+		setTimeout(function() {root.ball = undefined;}, 500);
+		
+		
+	}
+	this.moveBall = function(){
 		this.ball = undefined;
-		if(this.isEmpty())
-			return true;
-		return false;
 	}
 	this.getPosition = function(){
 		return {
