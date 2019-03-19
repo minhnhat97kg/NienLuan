@@ -46,6 +46,7 @@ function Game(){
 
         //Cho 5 bi vua them lon len
         this.setGrowed();
+        this.createBall();
 
         //Lay vi tri chuot khi click
         canvas.addEventListener("click",(event)=>{
@@ -266,7 +267,7 @@ function Game(){
 
         let directions = [{x:0,y:1},{x:1,y:0},{x:1,y:1},{x:1,y:-1}]
         let color = root.matrix[position.x][position.y].getColor();
-
+        let f = false //When it's true children ball when doesn't appear
         for( let dir of directions){
                 let ballToRemove=[];
 
@@ -300,24 +301,23 @@ function Game(){
                     }
                       // //console.log("Number true:",ballToRemove.length);
                     if(ballToRemove.length>=5){
+                        f = true;
                         this.points+=5+(ballToRemove.length-5)*2;
                         while(ballToRemove.length!=0){
                             let pos = ballToRemove.pop();
                             root.matrix[pos.x][pos.y].removeBall();
                         }
                         console.log("true");
-                    
-                        return true;
 
                     }
                 }catch(err){
                     console.log(err);
-                    return false;
+                    return f;
                     
                 }
         }
         console.log("false");
-        return false;
+        return f;
        }
 
     this.draw = function(){
