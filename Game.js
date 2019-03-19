@@ -19,6 +19,7 @@ function Game(){
     this.points         = 0;
     this.stackBalls     = [];
     this.bestUser       = {name:'unknown',score:0}
+    this.onlineuser     =0;
     var root            =this;
     //Ham ngay nhien
     this.random = function (n){
@@ -26,6 +27,7 @@ function Game(){
     }
 
     this.init = function () {
+
         database.ref('scoretable/').once('value').then(function(data){
                         let name = data.val().name;
                         if(name.length>8)
@@ -33,7 +35,13 @@ function Game(){
                         root.bestUser.name = name;
                         root.bestUser.score = data.val().score;
         });
+        database.ref('useronline/').on('value',function(data){
+                        root.onlineuser = data.numChildren();
+        });
+
+
         this.components.push(new Button(canvas.width/2,25,50,50,"NEW","NEW"));
+        this.points = 0;
         let ballInit = 0;
         //Init empty matrix;
         for(let i=0;i<9;i++){
@@ -337,6 +345,7 @@ function Game(){
        }
 
     this.draw = function(){
+            
             //Draw score
             context.beginPath();
             context.font = "bolder 20px Arial"
@@ -344,9 +353,14 @@ function Game(){
             context.textAlign = 'center';
             context.fillText(root.bestUser.name+':'+root.bestUser.score ,canvas.width*3/4+25,40,canvas.width/2,20);
             context.fillText("You : "+this.points,canvas.width*3/4+25,70,canvas.width/2,20);
+            //Draw score
+            context.beginPath();
+            context.font = "bolder 20px Arial"
+            context.fillStyle = "#888888"
+            context.textAlign = 'center';
+            context.fillText("Online: "+this.onlineuser,canvas.width/2,580,canvas.width/2,20);
+            context.fillText("You : "+this.points,canvas.width*3/4+25,70,canvas.width/2,20);
        
-            context.fill();
-
             //Draw the stack ball
             for(i in this.stackBalls){
                 context.beginPath();
