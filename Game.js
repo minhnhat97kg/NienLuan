@@ -51,27 +51,6 @@ function Game(){
         this.createBall();
         this.createBall();
 
-        this.createBall();
-        this.createBall();
-
-        this.createBall();
-        this.createBall();
-
-        this.createBall();
-        this.createBall();
-
-        this.createBall();
-        this.createBall();
-
-        this.createBall();
-        this.createBall();
-
-        this.createBall();
-        this.createBall();
-
-        this.createBall();
-        this.createBall();
-
         //Cho 5 bi vua them lon len
         this.setGrowed();
         this.createBall();
