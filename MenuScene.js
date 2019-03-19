@@ -1,6 +1,7 @@
 function MenuScene(){
     this.components = [];
     var root = this;
+    
     this.getMousePosition = function(event){
         var rect = canvas.getBoundingClientRect();
         return {
@@ -14,9 +15,7 @@ function MenuScene(){
     }
     this.init = function(){
         var play = new Button(canvas.width/4,canvas.height/8,200,50,"PLAY GAME","play_button");
-        var exit = new Button(canvas.width/4,canvas.height*2/8,200,50,"EXIT","exit_button");
         this.components.push(play);
-        this.components.push(exit);
         canvas.addEventListener("click",function click(event){
             var mousePos = root.getMousePosition(event);
              
@@ -32,10 +31,7 @@ function MenuScene(){
             });        
         });
     }
-    this.update = function(){
-        //Todo
-    }
-    this.draw = function(){
+    this.loop = function(){
         this.components.forEach(it=>{
             it.draw();
         });

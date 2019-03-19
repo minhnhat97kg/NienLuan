@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Line98</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 	<script type="text/javascript" src="Game.js"></script>
@@ -13,19 +12,40 @@
 
 	<canvas id="canvas" height="600" width="450"> </canvas>
 	<script type="text/javascript" >
+		
 		var canvas = document.getElementById("canvas");
 		var context = canvas.getContext("2d");
 		var scene = new MenuScene();
+		
 		setInterval(()=>{
-			
-  			context.clearRect(0, 0, canvas.width, canvas.height);
-      
-			scene.update();
-			scene.draw();
+					
+					try{
+			  			context.clearRect(0, 0, canvas.width, canvas.height); scene.loop();
+					
+					}catch(error){
+						//console.log(error);
+					}
 		},20);
 
-	</script> 	
+	</script> 
+	<style type="text/css">
+    	canvas {
+	        padding: 0;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #f2f2f2;
+            box-shadow: 2px 2px 2px 1px rgb(194, 194, 194);
+}
+	    body {
+	        background: #ffffff
+}
+
+	</style>	
 	
 </body>
-
 </html>

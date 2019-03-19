@@ -8,26 +8,22 @@ function Cell(x,y){
 	this.w = 50;
 	this.isMarked = false;
 	var root = this;
-	this.update = function(){
-		//TOdo
-	}
-	this.draw  = function(){
-		//TODO
-		
-		//context.fillStyle = 'black'; 
-			
+	
+	this.draw  = function(){	
+		//Draw ball if it's exist
 		if(!this.isEmpty())
 			this.ball.draw();
+		context.beginPath();
 		context.globalCompositeOperation='destination-over';
 		if(this.isMarked==true){
 			context.beginPath();
-			context.fillStyle = "#92aa96";
+			context.fillStyle ='#9b9b9b';
 			context.fillRect(this.x, this.y, 49, 49); 
 			context.fill();
 		}else{
-			context.strokeStyle = '#dedfe0'
-			context.rect(this.x, this.y, 48, 48); 
-			context.stroke();
+			context.fillStyle = '#c6c6c6'
+			context.fillRect(this.x, this.y, 48, 48); 
+			context.fill();
 		}
 		
 	}
@@ -50,7 +46,7 @@ function Cell(x,y){
 	}
 	this.removeBall = function(){
 		this.ball.setDestroyState();
-		setTimeout(function() {root.ball = undefined;}, 500);
+		setTimeout(function() {root.ball = undefined;}, 200);
 		
 		
 	}
@@ -69,6 +65,7 @@ function Cell(x,y){
 		}
 	}
 	this.canMove = function(){
+		//Neu khong rong va bi lon thi khong the di chuyen
 		if(this.isEmpty()==false)
 			if(this.isChild()==false)
 				return false

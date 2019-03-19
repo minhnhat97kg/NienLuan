@@ -7,6 +7,7 @@ function Ball(x,y,color){
     this.colorNumber = color;
     var size = 20;
     this.draw = function(){
+       
         context.beginPath();
         context.fillStyle = this.color;  
 
@@ -18,7 +19,10 @@ function Ball(x,y,color){
         }else{
             context.arc(this.y*50+25,this.x*50+25+100,size+=1,0,2*Math.PI);
         }
-        context.fill();
+        context.fill()
+       
+        
+        
     }
 
     this.setNotChild = function(){

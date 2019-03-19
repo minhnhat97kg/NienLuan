@@ -9,12 +9,15 @@ function Button(x,y,w,h,text,userData){
 		
 	}
 	this.draw = function (){
-		context.fillStyle = 'black'; 
-		context.fillRect(x, y, w, h); 
-		context.font = '30px FreeMono';
+		context.font = '30px FriieeMono';
 		context.fillStyle = '#ffffff';
 		context.textAlign = 'center';
-		context.fillText(this.text,x+(w/2),y+(2*h/3),w,h);
+		context.fillText(this.text,x+(w/2),y+h*3/4,w,h);
+		context.globalCompositeOperation='destination-over';
+		context.fillStyle = '#9d9d9d'; 
+		context.fillRect(x, y, w, h); 
+
+		
 	}
 	this.getUserData = function(){
 		return userData;
