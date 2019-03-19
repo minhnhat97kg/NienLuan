@@ -109,8 +109,8 @@ function Game(){
                                      //Theo duong doc
                                    
                                     if(this.checkLine({x:i,y:j})==false){
-                                         this.setGrowed();
-                                        this.createBal();
+                                        this.setGrowed();
+                                        this.createBall();
                                     }
 
 
@@ -360,8 +360,10 @@ function Game(){
 
             this.init();
             this.gameState = GAME.RUNNING;
+            return;
 
-        }else if(this.gameState == GAME.RUNNING){
+        }
+        if(this.gameState == GAME.RUNNING){
 
                 if(this.balls==0)
                     this.gameState=GAME.WIN;
@@ -369,7 +371,8 @@ function Game(){
                 if(this.balls==81)
                     this.gameState=GAME.OVER;
 
-        }else if(this.gameState == GAME.WIN){
+        }
+        if(this.gameState == GAME.WIN){
 
             context.font = '50px Roboto-Mono';
             context.fillStyle = '#ffffff';
@@ -379,7 +382,8 @@ function Game(){
             context.fillStyle = '#515151';
             context.fillRect(0, 250, 600, 100);
 
-        }else if(this.gameState == GAME.OVER){
+        }
+        if(this.gameState == GAME.OVER){
 
             context.font = '50px Roboto-Mono';
             context.fillStyle = '#ffffff';
@@ -390,7 +394,8 @@ function Game(){
             context.fillRect(0, 250, 600, 100);
 
 
-        }else if(this.gameState == GAME.EXIT){
+        }
+        if(this.gameState == GAME.EXIT){
            //Back to menu scene
             scene = new MenuScene();
         }
