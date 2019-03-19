@@ -107,8 +107,10 @@ function Game(){
                                     this.matrix[i][j].setNotChild();
                                     this.matrix[i][j].setMark(false);
                                      //Theo duong doc
-                                    this.nextStepEvent();
-                                    this.checkLine({x:i,y:j});
+                                    this.setGrowed();
+                                    if(this.checkLine({x:i,y:j})==false)
+                                        this.createBall();
+
 
                                     this.srcCell = undefined;
                                      setTimeout(()=>{
@@ -301,12 +303,20 @@ function Game(){
                             let pos = ballToRemove.pop();
                             root.matrix[pos.x][pos.y].removeBall();
                         }
+                        console.log("true");
+                    
+                        return true;
+
                     }
                 }catch(err){
                     console.log(err);
+                    return false;
+                    
                 }
         }
-    }
+        console.log("false");
+        return false;
+       }
 
     this.draw = function(){
             //Draw score
