@@ -107,9 +107,11 @@ function Game(){
                                     this.matrix[i][j].setNotChild();
                                     this.matrix[i][j].setMark(false);
                                      //Theo duong doc
-                                    this.setGrowed();
-                                    if(this.checkLine({x:i,y:j})==false)
-                                        this.createBall();
+                                   
+                                    if(this.checkLine({x:i,y:j})==false){
+                                         this.setGrowed();
+                                        this.createBal();
+                                    }
 
 
                                     this.srcCell = undefined;
