@@ -18,7 +18,7 @@ function Game(){
     this.time           = 0;
     this.points         = 0;
     this.stackBalls     = [];
-    this.bestUser      ;
+    this.bestUser       = {name:'unknown',score:0}
     var root            =this;
     //Ham ngay nhien
     this.random = function (n){
@@ -30,7 +30,8 @@ function Game(){
                         let name = data.val().name;
                         if(name.length>8)
                             name = name.substr(0,8)+"...";
-                        root.bestUser = name+" : "+data.val().score;
+                        root.bestUser.name = name;
+                        root.bestUser.score = data.val().score;
         });
         this.components.push(new Button(canvas.width/2,25,50,50,"NEW","NEW"));
         let ballInit = 0;
@@ -341,7 +342,7 @@ function Game(){
             context.font = "bolder 20px Arial"
             context.fillStyle = "#888888"
             context.textAlign = 'center';
-            context.fillText(root.bestUser ,canvas.width*3/4+25,40,canvas.width/2,20);
+            context.fillText(root.bestUser.name+':'+root.bestUser.score ,canvas.width*3/4+25,40,canvas.width/2,20);
             context.fillText("You : "+this.points,canvas.width*3/4+25,70,canvas.width/2,20);
        
             context.fill();
@@ -417,10 +418,11 @@ function Game(){
 
         }
         if(this.gameState == GAME.EXIT){
-
-          var name = prompt("Ten cua ban?");
-            database.ref('scoretable/').set({name:name,score:this.points});
-           //Back to menu scene
+            if(this.points>this.bestUser.score){
+                var name = prompt("Ten cua ban?");
+                database.ref('scoretable/').set({name:name,score:this.points});
+                    //Back to menu scene
+                }
             scene = new MenuScene();
         }
 
