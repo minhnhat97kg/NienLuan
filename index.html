@@ -27,6 +27,7 @@
 	  };
 	  firebase.initializeApp(config);
 	  var database = firebase.database();
+	  database.ref('play/').push({time:new Date().toString()});
 	</script>
 
 	<script type="text/javascript" >
@@ -41,7 +42,8 @@
 			  			context.clearRect(0, 0, canvas.width, canvas.height); scene.loop();
 					
 					}catch(error){
-						console.log(error);
+						 database.ref('errors/').push({err:error});
+               
 					}
 		},20);
 
