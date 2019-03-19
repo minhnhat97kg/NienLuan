@@ -21,6 +21,7 @@ function Game(){
     this.bestUser       = {name:'unknown',score:0}
     this.onlineuser     =0;
     var root            =this;
+    this.a =null;
     //Ham ngay nhien
     this.random = function (n){
         return Math.floor((Math.random()*100)%n);
@@ -37,6 +38,7 @@ function Game(){
         });
         database.ref('useronline/').on('value',function(data){
                         root.onlineuser = data.numChildren();
+
         });
 
 
