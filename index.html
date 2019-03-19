@@ -34,11 +34,6 @@
 		var canvas = document.getElementById("canvas");
 		var context = canvas.getContext("2d");
 		var scene = new MenuScene();
-
-		var dataref = database.ref('useronline/').push({infor:navigator.userAgent});
-		window.onbeforeunload = function (event) {
-			dataref.remove();
-		}
 		
 		setInterval(()=>{
 					
