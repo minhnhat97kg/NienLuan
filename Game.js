@@ -173,7 +173,7 @@ function Game(){
             let rand = this.random(_emptycell.length);
             let position = _emptycell[rand];
             this.matrix[position.x][position.y].addBall(new Ball(position.x,position.y,this.stackBalls.pop()));
-            _stack.push(this.random(6));
+            _stack.push(this.random(7));
         }
         this.stackBalls = _stack;
     }
