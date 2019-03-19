@@ -37,7 +37,9 @@ function Ball(x,y,color){
     this.setDestroyState = function(){
         this.state =2;
     }
-
+    this.copyBall = function(){
+        return this.ball.slice();
+    }
     
 
   

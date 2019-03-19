@@ -11,16 +11,14 @@ function Game(){
 
     this.gameState      = GAME.INIT; //0 is running,1 is winner, 2 is over
     this.components     = [];
-    this.COL            = 9;
-    this.ROW            = 9;
     this.matrix         = [];
     this.balls          = 6;
     this.srcCell        = undefined;
     this.mousePosition  = undefined;
     this.time           = 0;
     this.points         = 0;
-    this.numberOfColor  = 6;
     this.stackBalls     = [];
+    this.bestUser      ;
     var root            =this;
     //Ham ngay nhien
     this.random = function (n){
@@ -28,18 +26,48 @@ function Game(){
     }
 
     this.init = function () {
+        database.ref('scoretable/').once('value').then(function(data){
+                        let name = data.val().name;
+                        if(name.length>8)
+                            name = name.substr(0,8)+"...";
+                        root.bestUser = name+" : "+data.val().score;
+        });
+        this.components.push(new Button(canvas.width/2,25,50,50,"NEW","NEW"));
         let ballInit = 0;
         //Init empty matrix;
-        for(let i=0;i<this.ROW;i++){
+        for(let i=0;i<9;i++){
             this.matrix[i] = [];
-            for(let j=0;j<this.COL;j++)
-                this.matrix[i][j] = new Cell(i,j);
+            for(let j=0;j<9;j++){
+                this.matrix[i][j] = new Cell(i,j); 
+            }
 
         }
+
         //Tao stack khoi dau
         for(let i=0;i<3;i++)
-            this.stackBalls.push(this.random(this.numberOfColor));
-            //console.log("Added a ball to stack")
+            this.stackBalls.push(this.random(6));
+           
+
+        this.createBall();
+        this.createBall();
+
+        this.createBall();
+        this.createBall();
+
+        this.createBall();
+        this.createBall();
+
+        this.createBall();
+        this.createBall();
+
+        this.createBall();
+        this.createBall();
+
+        this.createBall();
+        this.createBall();
+
+        this.createBall();
+        this.createBall();
 
         this.createBall();
         this.createBall();
@@ -56,6 +84,7 @@ function Game(){
                 y:event.clientY - rect.top
             }
         });
+
     }
 
     //Su ly su kien khi lay duoc vi tri cuot
@@ -68,24 +97,30 @@ function Game(){
             return pos.x > rect.x && pos.x < rect.x+rect.w && pos.y < rect.y+rect.h && pos.y > rect.y
         }
         //Huy danh dau tat ca o trong matrix
-        for(let i=0;i<this.ROW;i++)
-            for(let j=0;j<this.COL;j++)
+        for(let i=0;i<9;i++)
+            for(let j=0;j<9;j++)
                 this.matrix[i][j].setMark(false);
 
-
-        for(let i=0;i<this.ROW;i++)
-            for(let j=0;j<this.COL;j++)
+        this.components.forEach(component=>{
+              if(checkInSide(this.mousePosition,component)==true){
+                  if(component.getUserData()=="NEW"){
+                        this.init();
+                        return ;
+                    }
+              }
+        });
+        for(let i=0;i<9;i++)
+            for(let j=0;j<9;j++)
                    //Kiem tra vi tri chuot co trung voi vi tri o [i.j]
-                    if(checkInSide(this.mousePosition,this.matrix[i][j])===true){
+                    if(checkInSide(this.mousePosition,this.matrix[i][j])==true){
 
-                        ////console.log("Click at",{i,j}," , Ball is empty= ",this.matrix[i][j].isEmpty(),this.matrix[i][j].isEmpty()==false?this.matrix[i][j].ball:0);
-                          //Neu chua o nao duoc chon
+                        //Neu chua o nao duoc chon
                        if(typeof this.srcCell=='undefined'){
                             //Chon o co Bi lon
-                           if(this.matrix[i][j].isEmpty()===false && this.matrix[i][j].isChild()==false){
+                           if(this.matrix[i][j].isEmpty()==false && this.matrix[i][j].isChild()==false){
                                 this.matrix[i][j].setMark(true);
                                 this.srcCell = this.matrix[i][j].getPosition();
-                                //console.log("Picked the ball");
+                              
                             //Huy chon khi bam bao bi khac
                             }else{
                                 //Danh o duoc chon
@@ -97,11 +132,12 @@ function Game(){
                         }else{
                             //Neu o [i,j] trong
                             if(this.matrix[i][j].isEmpty()||this.matrix[i][j].isChild()==true){
-                                //console.log({i,j}," is empty");
+                                
                                 //Neu co duong di den o [i,j]
                                 if(this.findPath(this.srcCell.x,this.srcCell.y,i,j)==true){
                                     //Di chuyen Bi va sinh ra bi moi
 
+                            
 
                                     this.matrix[i][j].addBall(new Ball(i,j,this.matrix[this.srcCell.x][this.srcCell.y].getColor()));
                                     this.matrix[this.srcCell.x][this.srcCell.y].moveBall();
@@ -117,8 +153,8 @@ function Game(){
 
                                     this.srcCell = undefined;
                                      setTimeout(()=>{
-                                        for(let i=0;i<this.ROW;i++)
-                                            for(let j=0;j<this.COL;j++)
+                                        for(let i=0;i<9;i++)
+                                            for(let j=0;j<9;j++)
                                                 this.matrix[i][j].setMark(false);
 
                                     },100);
@@ -136,8 +172,8 @@ function Game(){
         }
    //Ham gan Bi nho thanh Bi lon
     this.setGrowed = function(){
-        for(let i=0;i<this.ROW;i++)
-                for(let j=0;j<this.COL;j++)
+        for(let i=0;i<9;i++)
+                for(let j=0;j<9;j++)
                         if(!this.matrix[i][j].isEmpty() && this.matrix[i][j].isChild()){
                             this.matrix[i][j].setNotChild();
                             this.checkLine({x:i,y:j});
@@ -147,8 +183,8 @@ function Game(){
     this.createBall = function(){
         let _emptycell =[];
         let _stack = []
-        for(let i=0;i<this.ROW;i++)
-                    for(let j=0;j<this.COL;j++)
+        for(let i=0;i<9;i++)
+                    for(let j=0;j<9;j++)
                         if(this.matrix[i][j].isEmpty()==true)
                             _emptycell.push({x:i,y:j});
 
@@ -157,7 +193,7 @@ function Game(){
             let rand = this.random(_emptycell.length);
             let position = _emptycell[rand];
             this.matrix[position.x][position.y].addBall(new Ball(position.x,position.y,this.stackBalls.pop()));
-            _stack.push(this.random(this.numberOfColor));
+            _stack.push(this.random(6));
         }
         this.stackBalls = _stack;
     }
@@ -186,8 +222,8 @@ function Game(){
     //Lay ve vi tri o co gia tri distance nho nhat
     this.minDistance = function(distance,marked){
         let min = Number.MAX_VALUE, min_index ={x:0,y:0};
-        for(let i=0;i<this.ROW;i++)
-            for(let j=0;j<this.COL;j++)
+        for(let i=0;i<9;i++)
+            for(let j=0;j<9;j++)
                 if(marked[i][j]==false && distance[i][j]<min){
                     min = distance[i][j];
                     min_index.x=i;
@@ -201,11 +237,11 @@ function Game(){
         let marked = [];
         let prev = [];
 
-        for(let i=0;i<this.ROW;i++){
+        for(let i=0;i<9;i++){
             distance[i] = [];
             marked[i] = [];
             prev[i] = [];
-            for(let j=0;j<this.COL;j++){
+            for(let j=0;j<9;j++){
                 distance[i][j] = Number.MAX_VALUE;
                 marked[i][j] = false;
 
@@ -218,7 +254,7 @@ function Game(){
 
 
         //Duyet voi so lan = so o;
-        for(let loopcount = 0; loopcount<this.ROW*this.COL;loopcount++){
+        for(let loopcount = 0; loopcount<9*9;loopcount++){
 
             //Lay vi tri cua dinstance nho nhat
             let current = this.minDistance(distance,marked);
@@ -250,7 +286,7 @@ function Game(){
                          return true;
                      }
         }catch(error){
-            //console.log("Error when find path:",error,marked);
+            console.log("Error when find path:",error,marked);
 
         }
         return false;
@@ -299,7 +335,7 @@ function Game(){
                             break;
                         }
                     }
-                      // //console.log("Number true:",ballToRemove.length);
+                      
                     if(ballToRemove.length>=5){
                         f = true;
                         this.points+=5+(ballToRemove.length-5)*2;
@@ -307,7 +343,7 @@ function Game(){
                             let pos = ballToRemove.pop();
                             root.matrix[pos.x][pos.y].removeBall();
                         }
-                        console.log("true");
+                   
 
                     }
                 }catch(err){
@@ -316,17 +352,19 @@ function Game(){
                     
                 }
         }
-        console.log("false");
+      
         return f;
        }
 
     this.draw = function(){
             //Draw score
             context.beginPath();
-            context.font = "bolder 30px Arial"
+            context.font = "bolder 20px Arial"
             context.fillStyle = "#888888"
-            context.Align = 'center';
-            context.fillText("Score : "+this.points,350,60,canvas.width,50);
+            context.textAlign = 'center';
+            context.fillText(root.bestUser ,canvas.width*3/4+25,40,canvas.width/2,20);
+            context.fillText("You : "+this.points,canvas.width*3/4+25,70,canvas.width/2,20);
+       
             context.fill();
 
             //Draw the stack ball
@@ -339,12 +377,15 @@ function Game(){
             }
             //Draw balls
             this.balls = 0;
-            for(let i=0;i<this.ROW;i++)
-                for(let j=0;j<this.COL;j++){
+            for(let i=0;i<9;i++)
+                for(let j=0;j<9;j++){
                     this.matrix[i][j].draw();
                     if(this.matrix[i][j].isEmpty()==false)
                         this.balls++;
                     }
+            this.components.forEach(component=>{
+                component.draw();
+            });
 
     }
 
@@ -354,10 +395,11 @@ function Game(){
         this.createBall();
     }
 
+  
     this.loop = function(){
-
+       
         if(this.gameState==GAME.INIT){
-
+         
             this.init();
             this.gameState = GAME.RUNNING;
             return;
@@ -392,19 +434,24 @@ function Game(){
             context.globalCompositeOperation='destination-over';
             context.fillStyle = '#515151';
             context.fillRect(0, 250, 600, 100);
-
+           
 
         }
         if(this.gameState == GAME.EXIT){
+
+          var name = prompt("Ten cua ban?");
+            database.ref('scoretable/').set({name:name,score:this.points});
            //Back to menu scene
             scene = new MenuScene();
         }
 
         if(typeof this.mousePosition != 'undefined'){
                     this.clickProcessing();
+                        
                     this.mousePosition = undefined;
                 }
+          this.draw();
         //call function draw
-        this.draw();
+ 
     }
 }

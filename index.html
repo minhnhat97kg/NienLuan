@@ -11,6 +11,24 @@
 	<script type="text/javascript" src="Cell.js"></script>
 
 	<canvas id="canvas" height="600" width="450"> </canvas>
+	<!-- Firebase App is always required and must be first -->
+	<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-database.js"></script>
+
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyBr6njHki1ZE6XrNXCbU4rAnUSbXTvg50w",
+	    authDomain: "line98-b1607010.firebaseapp.com",
+	    databaseURL: "https://line98-b1607010.firebaseio.com",
+	    projectId: "line98-b1607010",
+	    storageBucket: "line98-b1607010.appspot.com",
+	    messagingSenderId: "448449741463"
+	  };
+	  firebase.initializeApp(config);
+	  var database = firebase.database();
+	</script>
+
 	<script type="text/javascript" >
 		
 		var canvas = document.getElementById("canvas");
@@ -23,7 +41,7 @@
 			  			context.clearRect(0, 0, canvas.width, canvas.height); scene.loop();
 					
 					}catch(error){
-						//console.log(error);
+						console.log(error);
 					}
 		},20);
 
