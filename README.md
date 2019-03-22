@@ -1,5 +1,5 @@
 # NienLuan 2019:
-Author: Huynh Minh Nhat
-        B1607010
-        Can Tho University, Can Tho City, Viet Nam
+Author: Huynh Minh Nhat<br>
+        B1607010<br>
+        Can Tho University, Can Tho City, Viet Nam<br>
  Website: https://minhnhat97kg.github.io/NienLuan/
