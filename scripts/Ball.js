@@ -18,13 +18,16 @@ class Ball{
        
 	
         if(this.state==0){
-        
+            context.shadowOffsetX = 2;
+            context.shadowOffsetY = 2;
+            context.shadowBlur    = 1;
+            context.shadowColor   = '#a1a1a1';
             context.arc(this.y*50+25,this.x*50+25+100,10,0,2*Math.PI);
        
         }else if(this.state==1){
             context.shadowOffsetX = 3;
             context.shadowOffsetY = 3;
-            context.shadowBlur    = 1;
+            context.shadowBlur    = 2;
             context.shadowColor   = '#a1a1a1';
             context.arc(this.y*50+25,this.x*50+25+100,this.size,0,2*Math.PI);
      
@@ -53,7 +56,7 @@ class Ball{
         let i=1;
         if(bool==true){
             this.animation = setInterval(function(){
-                if(root.size==25){
+                if(root.size==22){
                     i=-1;
                 }else if(root.size==15){
                      i=1;
