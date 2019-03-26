@@ -36,7 +36,7 @@ function Game(){
     this.init = function () {
         try{
                 database.ref('scoretable/').once('value').then(function(data){
-                                let name = data.val().name;
+                                let name = data.val().name||'unknown';
                                 if(name.length>8)
                                     name = name.substr(0,8)+"...";
                                 root.highScoreUser.name = name;
@@ -160,8 +160,8 @@ function Game(){
                                         },100);
                                     //Huy chon neu khong co duong di khi co o duoc chon
                                     }else{
-                                         this.matrix[i][j].setSelectedBall(false);
-                                         this.srcCell = undefined;
+                                        this.matrix[this.srcCell.x][this.srcCell.y].setSelectedBall(false);
+                                        this.srcCell = undefined;
                                     }
                               
                                 //Huy khi o khong trong
@@ -461,7 +461,7 @@ function Game(){
 
         }
         if(this.gameState == GAME.EXIT){
-            if(this.score>this.highScoreUser.score){
+            if(this.score>=this.highScoreUser.score){
                 let name = prompt("Ten cua ban?");
                 database.ref('scoretable/').set({name:name,score:this.score});
                     //Back to menu scene
