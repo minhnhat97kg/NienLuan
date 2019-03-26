@@ -1,4 +1,5 @@
-function Cell(x,y){
+class Cell{
+	constructor(x,y){
 	this.ball;
 	this.i = x;
 	this.j = y;
@@ -7,64 +8,80 @@ function Cell(x,y){
 	this.h = 50;
 	this.w = 50;
 	this.isMarked = false;
-	var root = this;
-	
-	this.draw  = function(){	
+	}
+	draw (){	
 		//Draw ball if it's exist
-		if(!this.isEmpty())
-			this.ball.draw();
+		
 		context.beginPath();
-		context.globalCompositeOperation='destination-over';
+		
 		if(this.isMarked==true){
+	
 			context.beginPath();
-			context.fillStyle ='#9b9b9b';
+			context.fillStyle ='#f6f6f6';
 			context.fillRect(this.x, this.y, 49, 49); 
 			context.fill();
+	
 		}else{
-			context.fillStyle = '#c6c6c6'
+	
+			context.fillStyle = '#d4d4d4'
 			context.fillRect(this.x, this.y, 48, 48); 
 			context.fill();
 		}
+		context.globalCompositeOperation='source-over';
+	
+		if(!this.isEmpty())
+			this.ball.draw();
+
 		
 	}
-	this.setMark = function(bol){
-		this.isMarked = bol;
+	setMarkedCell(bool){
+		this.isMarked = bool;
+		
 	}
-	this.addBall = function(ball){
+	setSelectedBall(bool){
+		if(!this.isEmpty())
+			this.ball.setSelected(bool);
+
+	}
+	addBall (ball){
 		this.ball = ball;
 	}
-	this.isChild = function(){
+	isChild (){
 		return this.ball.isChild();
 	}
-	this.isEmpty = function(){
+	isEmpty (){
 		if(typeof this.ball === "undefined")
 			return true;
 		return false;
 	}
-	this.setGrowed= function(){
+	setGrowed (){
 		this.ball.setGrowed();
 	}
-	this.removeBall = function(){
+	removeBall (){
 		this.ball.setDestroyState();
-		setTimeout(function() {root.ball = undefined;}, 200);
+		var root = this;
+		setTimeout(function (){
+			root.ball = undefined;
+		}, 300);
 		
 		
 	}
-	this.moveBall = function(){
+	moveBall (){
 		this.ball = undefined;
 	}
-	this.getPosition = function(){
+	getPosition (){
 		return {
 			x:this.i,
 			y:this.j
 		}
 	}
-	this.getColor = function(){
+	getColor (){
 		if(this.isEmpty()==false){
 			return this.ball.colorNumber;
 		}
+		return undefined;
 	}
-	this.canMove = function(){
+	canMove  (){
 		//Neu khong rong va bi lon thi khong the di chuyen
 		if(this.isEmpty()==false)
 			if(this.isChild()==false)

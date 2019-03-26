@@ -5,19 +5,17 @@
 </head>
 <body>
 	<script type="text/javascript" src="scripts/Game.js"></script>
-	<script type="text/javascript" src="scripts/Button.js"></script>
 	<script type="text/javascript" src="scripts/MenuScene.js"></script>
 	<script type="text/javascript" src="scripts/Ball.js"></script>
 	<script type="text/javascript" src="scripts/Cell.js"></script>
 	<script type="text/javascript" src="scripts/ImageButton.js"></script>
-
-	<canvas id="canvas" height="600" width="450"> </canvas>
-	<!-- Firebase App is always required and must be first -->
 	<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-database.js"></script>
-
+	<script src="https://www.gstatic.com/firebasejs/5.9.0/firebase-database.js"></script>
+	<canvas id="canvas" height="600" width="450"> </canvas>
+	
 	<script>
 	  // Initialize Firebase
+
 	  var config = {
 	    apiKey: "AIzaSyBr6njHki1ZE6XrNXCbU4rAnUSbXTvg50w",
 	    authDomain: "line98-b1607010.firebaseapp.com",
@@ -26,16 +24,15 @@
 	    storageBucket: "line98-b1607010.appspot.com",
 	    messagingSenderId: "448449741463"
 	  };
-	  firebase.initializeApp(config);
-	  var database = firebase.database();
-	  
-	  database.ref('play/').push({time:new Date().toString()});
+	  try{
+	  	  firebase.initializeApp(config);
+	  	  var database = firebase.database();
+	  	  
+	  	  database.ref('play/').push({time:new Date().toString()});
+	  }catch(error){
+	  	console.log("Error to connect firebase!");
+	  }
 
-
-	</script>
-
-	<script type="text/javascript" >
-		
 		var canvas 	= document.getElementById("canvas");
 		var context = canvas.getContext("2d");
 		var scene 	= new MenuScene();

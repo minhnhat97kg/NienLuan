@@ -1,15 +1,10 @@
 class MenuScene{
     
     constructor(){
-        console.log("constructor");
         this.components = [];
         this.background  = new Image();; 
-        var root        = this;
-        
-        
-        this.background.src = './images/background.png';
-        console.log(this.background);
-        var play = new Button(canvas.width/4,canvas.height/4,200,50,"PLAY GAME","play_button");
+        let root        = this;
+        let play = new ImageButton(210,canvas.height/4,60,"./images/play.svg","play_button");
        
         this.components.push(play);
        
@@ -19,10 +14,14 @@ class MenuScene{
              
             root.components.forEach(element => {
                 
-                if(root.isInside(mousePos,element))
+                if(root.isInsideArc(mousePos,element))
                     if(element.getUserData()=="play_button"){
-                        scene = new Game();
-                        canvas.removeEventListener("click",click);
+                        element.setClicked();
+                        setTimeout(()=>{
+                            scene = new Game();
+                            canvas.removeEventListener("click",click);
+                        },150);
+                      
                     }
                     else if(element.getUserData()=="exit_button")
                         console.log("Exit!");
@@ -37,9 +36,8 @@ class MenuScene{
             y:event.clientY - rect.top
         }
     }
-   isInside (pos, rect){
-
-        return pos.x > rect.x && pos.x < rect.x+rect.w && pos.y < rect.y+rect.h && pos.y > rect.y
+   isInsideArc(pos, arc){
+         return Math.sqrt((Math.abs(pos.x-arc.x)**2+(Math.abs(pos.y-arc.y)**2)))<=arc.r;
     }
 
    
@@ -48,8 +46,6 @@ class MenuScene{
         this.components.forEach(it=>{
             it.draw();
         });
-        context.drawImage(this.background,0,0,canvas.width,canvas.height);
-    
  
     }
   }
