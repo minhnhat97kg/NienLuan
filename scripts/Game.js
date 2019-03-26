@@ -306,6 +306,7 @@ function Game(){
         let directions = [{x:0,y:1},{x:1,y:0},{x:1,y:1},{x:1,y:-1}]
         let color = root.matrix[position.x][position.y].getColor();
         let f = false //When it's true children ball when doesn't appear
+        let totalball = 0;
         for( let dir of directions){
                 let ballToRemove=[];
 
@@ -340,7 +341,7 @@ function Game(){
 
                     if(ballToRemove.length>=5){
                         f = true;
-                        this.score+=5+(ballToRemove.length-5)*2;
+                        totalball+=ballToRemove.length-1;
                         while(ballToRemove.length!=0){
                             let pos = ballToRemove.pop();
                             root.matrix[pos.x][pos.y].removeBall();
@@ -354,6 +355,8 @@ function Game(){
 
                 }
         }
+        let score = (5+(totalball-4)*2);
+        this.score += score>=0?score:0;
 
         return f;
        }
