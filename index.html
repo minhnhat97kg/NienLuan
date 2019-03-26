@@ -4,11 +4,12 @@
 	<title>Line98</title>
 </head>
 <body>
-	<script type="text/javascript" src="Game.js"></script>
-	<script type="text/javascript" src="Button.js"></script>
-	<script type="text/javascript" src="MenuScene.js"></script>
-	<script type="text/javascript" src="Ball.js"></script>
-	<script type="text/javascript" src="Cell.js"></script>
+	<script type="text/javascript" src="scripts/Game.js"></script>
+	<script type="text/javascript" src="scripts/Button.js"></script>
+	<script type="text/javascript" src="scripts/MenuScene.js"></script>
+	<script type="text/javascript" src="scripts/Ball.js"></script>
+	<script type="text/javascript" src="scripts/Cell.js"></script>
+	<script type="text/javascript" src="scripts/ImageButton.js"></script>
 
 	<canvas id="canvas" height="600" width="450"> </canvas>
 	<!-- Firebase App is always required and must be first -->
@@ -27,23 +28,24 @@
 	  };
 	  firebase.initializeApp(config);
 	  var database = firebase.database();
+	  
 	  database.ref('play/').push({time:new Date().toString()});
+
+
 	</script>
 
 	<script type="text/javascript" >
 		
-		var canvas = document.getElementById("canvas");
+		var canvas 	= document.getElementById("canvas");
 		var context = canvas.getContext("2d");
-		var scene = new MenuScene();
+		var scene 	= new MenuScene();
 		
-		setInterval(()=>{
-					
+		var gameloop = setInterval(()=>{
 					try{
 			  			context.clearRect(0, 0, canvas.width, canvas.height); scene.loop();
-					
 					}catch(error){
-						 database.ref('errors/').push({err:error});
-               
+						console.log(error);
+						clearInterval(gameloop);
 					}
 		},20);
 
@@ -51,6 +53,7 @@
 	</script> 
 	<style type="text/css">
     	canvas {
+
 	        padding: 0;
             margin: auto;
             display: block;

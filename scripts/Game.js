@@ -1,5 +1,5 @@
 function Game(){
-    var colors = ["red","orange","yellow","green","blue","purple","violet"];
+    const  colors = ["red","orange","yellow","green","blue","purple","violet"];
 
     const GAME = {
         INIT:0,
@@ -15,12 +15,11 @@ function Game(){
     this.balls          = 6;
     this.srcCell        = undefined;
     this.mousePosition  = undefined;
-    this.time           = 0;
-    this.points         = 0;
+    this.score          = 0;
     this.stackBalls     = [];
-    this.bestUser       = {name:'unknown',score:0}
-    var root            =this;
-   
+    this.highScoreUser  = {name:'unknown',score:0}
+    const root            =this;
+
     //Ham ngay nhien
     this.random = function (n){
         return Math.floor((Math.random()*100)%n);
@@ -32,20 +31,19 @@ function Game(){
                         let name = data.val().name;
                         if(name.length>8)
                             name = name.substr(0,8)+"...";
-                        root.bestUser.name = name;
-                        root.bestUser.score = data.val().score;
+                        root.highScoreUser.name = name;
+                        root.highScoreUser.score = data.val().score;
         });
+
+        this.components.push(new ImageButton(225,25,30,30,"./images/new.svg","NEW"));
         
-
-
-        this.components.push(new Button(canvas.width/2,25,50,50,"NEW","NEW"));
-        this.points = 0;
+        this.score = 0;
         let ballInit = 0;
         //Init empty matrix;
         for(let i=0;i<9;i++){
             this.matrix[i] = [];
             for(let j=0;j<9;j++){
-                this.matrix[i][j] = new Cell(i,j); 
+                this.matrix[i][j] = new Cell(i,j);
             }
 
         }
@@ -53,13 +51,13 @@ function Game(){
         //Tao stack khoi dau
         for(let i=0;i<3;i++)
             this.stackBalls.push(this.random(6));
-           
+
 
         this.createBall();
         this.createBall();
 
         //Cho 5 bi vua them lon len
-        this.setGrowed();
+        this.setBallGrow();
         this.createBall();
 
         //Lay vi tri chuot khi click
@@ -106,7 +104,7 @@ function Game(){
                            if(this.matrix[i][j].isEmpty()==false && this.matrix[i][j].isChild()==false){
                                 this.matrix[i][j].setMark(true);
                                 this.srcCell = this.matrix[i][j].getPosition();
-                              
+
                             //Huy chon khi bam bao bi khac
                             }else{
                                 //Danh o duoc chon
@@ -118,21 +116,21 @@ function Game(){
                         }else{
                             //Neu o [i,j] trong
                             if(this.matrix[i][j].isEmpty()||this.matrix[i][j].isChild()==true){
-                                
+
                                 //Neu co duong di den o [i,j]
                                 if(this.findPath(this.srcCell.x,this.srcCell.y,i,j)==true){
                                     //Di chuyen Bi va sinh ra bi moi
 
-                            
+
 
                                     this.matrix[i][j].addBall(new Ball(i,j,this.matrix[this.srcCell.x][this.srcCell.y].getColor()));
                                     this.matrix[this.srcCell.x][this.srcCell.y].moveBall();
-                                    this.matrix[i][j].setNotChild();
+                                    this.matrix[i][j].setGrowed();
                                     this.matrix[i][j].setMark(false);
                                      //Theo duong doc
-                                   
+
                                     if(this.checkLine({x:i,y:j})==false){
-                                        this.setGrowed();
+                                        this.setBallGrow();
                                         this.createBall();
                                     }
 
@@ -157,11 +155,11 @@ function Game(){
                     }
         }
    //Ham gan Bi nho thanh Bi lon
-    this.setGrowed = function(){
+    this.setBallGrow = function(){
         for(let i=0;i<9;i++)
                 for(let j=0;j<9;j++)
                         if(!this.matrix[i][j].isEmpty() && this.matrix[i][j].isChild()){
-                            this.matrix[i][j].setNotChild();
+                            this.matrix[i][j].setGrowed();
                             this.checkLine({x:i,y:j});
                         }
     }
@@ -321,37 +319,37 @@ function Game(){
                             break;
                         }
                     }
-                      
+
                     if(ballToRemove.length>=5){
                         f = true;
-                        this.points+=5+(ballToRemove.length-5)*2;
+                        this.score+=5+(ballToRemove.length-5)*2;
                         while(ballToRemove.length!=0){
                             let pos = ballToRemove.pop();
                             root.matrix[pos.x][pos.y].removeBall();
                         }
-                   
+
 
                     }
                 }catch(err){
                     console.log(err);
                     return f;
-                    
+
                 }
         }
-      
+
         return f;
        }
 
     this.draw = function(){
-            
+
             //Draw score
             context.beginPath();
             context.font = "bolder 20px Arial"
             context.fillStyle = "#888888"
             context.textAlign = 'center';
-            context.fillText(root.bestUser.name+':'+root.bestUser.score ,canvas.width*3/4+25,40,canvas.width/2,20);
-            context.fillText("You : "+this.points,canvas.width*3/4+25,70,canvas.width/2,20);
-            
+            context.fillText(root.highScoreUser.name+':'+root.highScoreUser.score ,canvas.width*3/4+25,40,canvas.width/2,20);
+            context.fillText("You : "+this.score,canvas.width*3/4+25,70,canvas.width/2,20);
+
             //Draw the stack ball
             for(i in this.stackBalls){
                 context.beginPath();
@@ -368,6 +366,7 @@ function Game(){
                     if(this.matrix[i][j].isEmpty()==false)
                         this.balls++;
                     }
+            //Draw button
             this.components.forEach(component=>{
                 component.draw();
             });
@@ -375,16 +374,15 @@ function Game(){
     }
 
     this.nextStepEvent = function(){
-
-        this.setGrowed();
+        this.setBallGrowe();
         this.createBall();
     }
 
-  
+
     this.loop = function(){
-       
+
         if(this.gameState==GAME.INIT){
-         
+
             this.init();
             this.gameState = GAME.RUNNING;
             return;
@@ -419,25 +417,24 @@ function Game(){
             context.globalCompositeOperation='destination-over';
             context.fillStyle = '#515151';
             context.fillRect(0, 250, 600, 100);
-           
+
 
         }
         if(this.gameState == GAME.EXIT){
-            if(this.points>this.bestUser.score){
+            if(this.score>this.highScoreUser.score){
                 var name = prompt("Ten cua ban?");
-                database.ref('scoretable/').set({name:name,score:this.points});
+                database.ref('scoretable/').set({name:name,score:this.score});
                     //Back to menu scene
                 }
             scene = new MenuScene();
         }
 
         if(typeof this.mousePosition != 'undefined'){
+
                     this.clickProcessing();
-                        
                     this.mousePosition = undefined;
                 }
           this.draw();
-        //call function draw
- 
+
     }
 }

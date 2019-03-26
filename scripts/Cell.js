@@ -34,15 +34,15 @@ function Cell(x,y){
 		this.ball = ball;
 	}
 	this.isChild = function(){
-		return this.ball.getChild();
+		return this.ball.isChild();
 	}
 	this.isEmpty = function(){
 		if(typeof this.ball === "undefined")
 			return true;
 		return false;
 	}
-	this.setNotChild= function(){
-		this.ball.setNotChild();
+	this.setGrowed= function(){
+		this.ball.setGrowed();
 	}
 	this.removeBall = function(){
 		this.ball.setDestroyState();

@@ -12,23 +12,29 @@ function Ball(x,y,color){
         context.fillStyle = this.color;  
 
         if(this.state==0){
+        
             context.arc(this.y*50+25,this.x*50+25+100,10,0,2*Math.PI);
-        }
-        else if(this.state==1){
+       
+        }else if(this.state==1){
+      
             context.arc(this.y*50+25,this.x*50+25+100,20,0,2*Math.PI);
+     
         }else{
+    
             context.arc(this.y*50+25,this.x*50+25+100,size+=1,0,2*Math.PI);
+    
         }
+     
         context.fill()
        
         
         
     }
 
-    this.setNotChild = function(){
+    this.setGrowed = function(){
         this.state = 1;
     }
-    this.getChild = function(){
+    this.isChild = function(){
         return this.state==0?true:false;
     }
     this.getColorNumber = function(){
@@ -36,11 +42,5 @@ function Ball(x,y,color){
     }
     this.setDestroyState = function(){
         this.state =2;
-    }
-    this.copyBall = function(){
-        return this.ball.slice();
-    }
-    
-
-  
+    }   
 }
