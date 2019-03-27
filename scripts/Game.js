@@ -64,12 +64,12 @@ function Game(){
             this.stackBalls.push(this.random(6));
 
 
-        this.createBall();
-        this.createBall();
+        this.createRandomBall();
+        this.createRandomBall();
 
         //Cho 5 bi vua them lon len
         this.setBallGrow();
-        this.createBall();
+        this.createRandomBall();
 
      
     }
@@ -141,8 +141,11 @@ function Game(){
                                         
                                         
                                         if(this.checkLine({x:i,y:j})==false){
+                                            //Di chuyển bi nhỏ bị đè sang vị trí ngẫu nhiên 
+                                            if(typeof childBallColor!= 'undefined')
+                                                this.moveBallRadom(childBallColor);
                                             this.setBallGrow();
-                                            this.createBall();
+                                            this.createRandomBall();
                                         }else{
                                             if(typeof childBallColor!= 'undefined')
                                                 setTimeout(()=>{
@@ -182,7 +185,7 @@ function Game(){
                         }
     }
     //Them 1 bi vao vi tri ngau nhien
-    this.createBall = function(){
+    this.createRandomBall = function(){
         let _emptycell =[];
         let _stack = []
         for(let i=0;i<9;i++)
@@ -198,6 +201,20 @@ function Game(){
             _stack.push(this.random(7));
         }
         this.stackBalls = _stack;
+    }
+
+    this.moveBallRadom = function(color){
+        let _emptycell =[];
+        for(let i=0;i<9;i++)
+                    for(let j=0;j<9;j++)
+                        if(this.matrix[i][j].isEmpty()==true)
+                            _emptycell.push({x:i,y:j});
+
+
+            let rand = this.random(_emptycell.length);
+            let position = _emptycell[rand];
+            this.matrix[position.x][position.y].addBall(new Ball(position.x,position.y,color));
+            
     }
     //Tra ve tap 4 o kề nếu chúng rỗng
     this.neighborSet = function(positionx,positiony){
@@ -410,7 +427,7 @@ function Game(){
 
     this.nextStepEvent = function(){
         this.setBallGrowe();
-        this.createBall();
+        this.createRandomBall();
     }
 
 
