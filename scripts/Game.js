@@ -66,8 +66,8 @@ function Game(){
 
         this.createRandomBall();
         this.createRandomBall();
-
-        //Cho 5 bi vua them lon len
+        
+        //Cho 6 bi vua them lon len
         this.setBallGrow();
         this.createRandomBall();
 
@@ -193,12 +193,20 @@ function Game(){
                         if(this.matrix[i][j].isEmpty()==true)
                             _emptycell.push({x:i,y:j});
 
-
+                            console.log("===========");
         for(let count=0;count<3;count++){
+            
             let rand = this.random(_emptycell.length);
-            let position = _emptycell[rand];
+            let position = _emptycell.splice(rand,1)[0];
+            if(typeof position=='undefined'){
+                this.gameState=GAME.OVER;
+                return;
+            }
+            console.log(position);
             this.matrix[position.x][position.y].addBall(new Ball(position.x,position.y,this.stackBalls.pop()));
             _stack.push(this.random(7));
+            
+
         }
         this.stackBalls = _stack;
     }
@@ -210,10 +218,13 @@ function Game(){
                         if(this.matrix[i][j].isEmpty()==true)
                             _emptycell.push({x:i,y:j});
 
-
-            let rand = this.random(_emptycell.length);
-            let position = _emptycell[rand];
-            this.matrix[position.x][position.y].addBall(new Ball(position.x,position.y,color));
+        if(_emptycell.length==0){
+            this.gameState = GAME.OVER;
+            return;
+        }
+        let rand = this.random(_emptycell.length);
+        let position = _emptycell.splice(rand,1)[0];
+        this.matrix[position.x][position.y].addBall(new Ball(position.x,position.y,color));
             
     }
     //Tra ve tap 4 o kề nếu chúng rỗng
@@ -415,7 +426,7 @@ function Game(){
             for(let i=0;i<9;i++)
                 for(let j=0;j<9;j++){
                     this.matrix[i][j].draw();
-                    if(this.matrix[i][j].isEmpty()==false)
+                    if(this.matrix[i][j].isEmpty()==false&&this.matrix[i][j].isChild()==false)
                         this.balls++;
                     }
             //Draw button
