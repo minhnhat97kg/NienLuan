@@ -437,7 +437,7 @@ function Game(){
     }
 
     this.nextStepEvent = function(){
-        this.setBallGrowe();
+        this.setBallGrow();
         this.createRandomBall();
     }
 
