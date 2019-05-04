@@ -1,39 +1,41 @@
-function Game(){
-    const  colors = ["red","orange","yellow","green","blue","purple","violet"];
+class Game{
+    constructor(){
 
-    const GAME = {
-        INIT:0,
-        RUNNING:1,
-        WIN:2,
-        OVER:3,
-        EXIT:4
-    };
-
-    this.gameState      = GAME.INIT; //0 is running,1 is winner, 2 is over
-    this.components     = [];
-    this.matrix         = [];
-    this.balls          = 6;
-    this.srcCell        = undefined;
-    this.mousePosition  = undefined;
-    this.score          = 0;
-    this.stackBalls     = [];
-    this.highScoreUser  = {name:'unknown',score:0};
-    const root          =this;
-   //Lay vi tri chuot khi click
-   canvas.addEventListener("click",(event)=>{
-    let rect = canvas.getBoundingClientRect();
-    this.mousePosition =  {
-        x:event.clientX - rect.left,
-        y:event.clientY - rect.top
+        this.colors = ["red","orange","yellow","green","blue","purple","violet"];
+        this.GAME = {
+            INIT:0,
+            RUNNING:1,
+            WIN:2,
+            OVER:3,
+            EXIT:4
+        };
+    
+        this.gameState      = this.GAME.INIT; //0 is running,1 is winner, 2 is over
+        this.components     = [];
+        this.matrix         = [];
+        this.balls          = 6;
+        this.srcCell        = undefined;
+        this.mousePosition  = undefined;
+        this.score          = 0;
+        this.stackBalls     = [];
+        this.highScoreUser  = {name:'unknown',score:0};
+        canvas.addEventListener("click",(event)=>{
+            let rect = canvas.getBoundingClientRect();  
+            this.mousePosition =  {
+                x:event.clientX - rect.left,
+                y:event.clientY - rect.top
+            }
+        });
+       
     }
-});
 
     //Ham ngay nhien
-    this.random = function (n){
+    random(n){
         return Math.floor((Math.random()*100)%n);
     }
 
-    this.init = function () {
+   init() {
+        let root = this;
         try{
                 database.ref('scoretable/').once('value').then(function(data){
                                 let name = data.val().name||'unknown';
@@ -75,10 +77,10 @@ function Game(){
     }
 
     //Su ly su kien khi lay duoc vi tri cuot
-    this.clickProcessing = function(){
+    clickProcessing (){
         //Ham kiem tra vi tri chuot co nam trong hinh
-        if(this.gameState==GAME.WIN||this.gameState==GAME.OVER)
-            this.gameState = GAME.EXIT;
+        if(this.gameState == this.GAME.WIN || this.gameState == this.GAME.OVER)
+            this.gameState = this.GAME.EXIT;
 
         let checkInSide = (pos, rect) =>{
             return pos.x > rect.x && pos.x < rect.x+rect.w && pos.y < rect.y+rect.h && pos.y > rect.y
@@ -128,8 +130,8 @@ function Game(){
 
                                     //Neu co duong di den o [i,j]
                                     if(this.findPath(this.srcCell.x,this.srcCell.y,i,j)==true){
+                                       
                                         //Di chuyen Bi va sinh ra bi moi
-
                                         let childBallColor ;
                                         if(this.matrix[i][j].isEmpty() ==false && this.matrix[i][j].isChild()==true){
                                             childBallColor = this.matrix[i][j].getColor();
@@ -176,7 +178,7 @@ function Game(){
                     }
         }
    //Ham gan Bi nho thanh Bi lon
-    this.setBallGrow = function(){
+    setBallGrow(){
         for(let i=0;i<9;i++)
                 for(let j=0;j<9;j++)
                         if(!this.matrix[i][j].isEmpty() && this.matrix[i][j].isChild()){
@@ -185,7 +187,7 @@ function Game(){
                         }
     }
     //Them 1 bi vao vi tri ngau nhien
-    this.createRandomBall = function(){
+    createRandomBall (){
         let _emptycell =[];
         let _stack = []
         for(let i=0;i<9;i++)
@@ -193,7 +195,8 @@ function Game(){
                         if(this.matrix[i][j].isEmpty()==true)
                             _emptycell.push({x:i,y:j});
 
-                            console.log("===========");
+        console.log("===========");
+        
         for(let count=0;count<3;count++){
             
             let rand = this.random(_emptycell.length);
@@ -211,7 +214,7 @@ function Game(){
         this.stackBalls = _stack;
     }
 
-    this.moveBallRadom = function(color){
+    moveBallRadom (color){
         let _emptycell =[];
         for(let i=0;i<9;i++)
                     for(let j=0;j<9;j++)
@@ -228,7 +231,7 @@ function Game(){
             
     }
     //Tra ve tap 4 o kề nếu chúng rỗng
-    this.neighborSet = function(positionx,positiony){
+   neighborSet (positionx,positiony){
             let neighbors = [];
             let checkValid = (x,y)=>{
                 if((x>=0&&x<9)&&(y>=0&&y<9))
@@ -250,7 +253,7 @@ function Game(){
             return neighbors;
     }
     //Lay ve vi tri o co gia tri distance nho nhat
-    this.minDistance = function(distance,marked){
+    minDistance (distance,marked){
         let min = Number.MAX_VALUE, min_index ={x:0,y:0};
         for(let i=0;i<9;i++)
             for(let j=0;j<9;j++)
@@ -262,7 +265,7 @@ function Game(){
         return min_index;
     }
     //Thuat toan tim duong dijikstra
-    this.findPath = function(startx,starty,finishx,finishy){
+    findPath(startx,starty,finishx,finishy){
         let distance = [];
         let marked = [];
         let prev = [];
@@ -322,9 +325,8 @@ function Game(){
         return false;
     }
     //Kiem tra duong ngang,doc,cheo co >=5 bi cung mau
-    this.checkLine = function(position){
-
-
+    checkLine(position){
+        let root = this;
         let checkValid = (x,y)=>{
             if((x>=0&&x<9)&&(y>=0&&y<9))
                 return true;
@@ -389,78 +391,78 @@ function Game(){
         return f;
        }
 
-    this.draw = function(){
-
-            //Draw score
-            context.save();
+    draw(){
+        let root = this;
+        //Draw score
+        context.save();
+        context.beginPath();
+        
+        context.shadowOffsetX = 3;
+        context.shadowOffsetY = 3;
+        context.shadowBlur    = 8;
+        context.shadowColor   = '#a1a1a1';
+        context.font = "bolder 20px Arial"
+        context.fillStyle = "#888888"
+        context.textAlign = 'center';
+        context.fillText(root.highScoreUser.name+':'+root.highScoreUser.score ,canvas.width*3/4,40,canvas.width/2,20);
+        context.fillText("You : "+this.score,canvas.width*3/4,70,canvas.width/2,225);
+        context.restore();
+        context.save();
+        //Draw the stack ball
+        for(let i in this.stackBalls){
+          
             context.beginPath();
-            
             context.shadowOffsetX = 3;
             context.shadowOffsetY = 3;
-            context.shadowBlur    = 8;
+            context.shadowBlur    = 1;
             context.shadowColor   = '#a1a1a1';
-            context.font = "bolder 20px Arial"
-            context.fillStyle = "#888888"
-            context.textAlign = 'center';
-            context.fillText(root.highScoreUser.name+':'+root.highScoreUser.score ,canvas.width*3/4,40,canvas.width/2,20);
-            context.fillText("You : "+this.score,canvas.width*3/4,70,canvas.width/2,225);
-            context.restore();
-            context.save();
-            //Draw the stack ball
-            for(i in this.stackBalls){
-              
-                context.beginPath();
-                context.shadowOffsetX = 3;
-                context.shadowOffsetY = 3;
-                context.shadowBlur    = 1;
-                context.shadowColor   = '#a1a1a1';
-                context.fillStyle = colors[this.stackBalls[i]];
-                context.arc(i*50+50,50,20,0,2*Math.PI);
-                context.fill();
-                
+            context.fillStyle = this.colors[this.stackBalls[i]];
+            context.arc(i*50+50,50,20,0,2*Math.PI);
+            context.fill();
+            
 
-            }
-            context.restore();
-            //Draw balls
-            this.balls = 0;
-            for(let i=0;i<9;i++)
-                for(let j=0;j<9;j++){
-                    this.matrix[i][j].draw();
-                    if(this.matrix[i][j].isEmpty()==false&&this.matrix[i][j].isChild()==false)
-                        this.balls++;
-                    }
-            //Draw button
-            this.components.forEach(component=>{
-                component.draw();
-            });
+        }
+        context.restore();
+        //Draw balls
+        this.balls = 0;
+        for(let i=0;i<9;i++)
+            for(let j=0;j<9;j++){
+                this.matrix[i][j].draw();
+                if(this.matrix[i][j].isEmpty()==false && this.matrix[i][j].isChild()==false)
+                    this.balls++;
+                }
+        //Draw button
+        this.components.forEach(component=>{
+            component.draw();
+        });
 
     }
 
-    this.nextStepEvent = function(){
+    nextStepEvent(){
         this.setBallGrow();
         this.createRandomBall();
     }
 
 
-    this.loop = function(){
+    loop(){
 
-        if(this.gameState==GAME.INIT){
+        if(this.gameState==this.GAME.INIT){
 
             this.init();
-            this.gameState = GAME.RUNNING;
+            this.gameState = this.GAME.RUNNING;
             return;
 
         }
-        if(this.gameState == GAME.RUNNING){
+        if(this.gameState == this.GAME.RUNNING){
 
                 if(this.balls==0)
-                    this.gameState=GAME.WIN;
+                    this.gameState=this.GAME.WIN;
 
                 if(this.balls==81)
-                    this.gameState=GAME.OVER;
+                    this.gameState=this.GAME.OVER;
             this.draw();
         }
-        if(this.gameState == GAME.WIN){
+        if(this.gameState == this.GAME.WIN){
            
             context.fillStyle = '#515151';
             context.fillRect(0, 250, 600, 100);
@@ -474,7 +476,7 @@ function Game(){
             
 
         }
-        if(this.gameState == GAME.OVER){
+        if(this.gameState == this.GAME.OVER){
            
             context.fillStyle = '#515151';
             context.fillRect(0, 250, 600, 100);
@@ -488,7 +490,7 @@ function Game(){
 
 
         }
-        if(this.gameState == GAME.EXIT){
+        if(this.gameState == this.GAME.EXIT){
             if(this.score>=this.highScoreUser.score){
                 let name = prompt("Ten cua ban?");
                 database.ref('scoretable/').set({name:name,score:this.score});
