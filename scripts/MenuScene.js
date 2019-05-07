@@ -2,12 +2,11 @@ class MenuScene{
     
     constructor(){
         this.components = [];
-        this.background  = new Image();; 
+        this.background  = new Image();
         let root        = this;
-        let play = new ImageButton(210,canvas.height/4,60,"./images/play.svg","play_button");
-       
+        let play = new ImageButton(210,canvas.height*3/4,60,"./images/play.svg","play_button");
         this.components.push(play);
-       
+       this.background.src='./images/background.png'
 
         canvas.addEventListener("click",function click(event){
             var mousePos = root.getMousePosition(event);
@@ -23,8 +22,7 @@ class MenuScene{
                         },150);
                       
                     }
-                    else if(element.getUserData()=="exit_button")
-                        console.log("Exit!");
+
             });        
         });
     }
@@ -39,10 +37,10 @@ class MenuScene{
    isInsideArc(pos, arc){
          return Math.sqrt((Math.abs(pos.x-arc.x)**2+(Math.abs(pos.y-arc.y)**2)))<=arc.r;
     }
-
+    
    
     loop(){
- 
+       context.drawImage(this.background,50,20,350,350 );
         this.components.forEach(it=>{
             it.draw();
         });
