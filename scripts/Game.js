@@ -18,7 +18,7 @@ class Game{
         this.mousePosition  = undefined;
         this.score          = 0;
         this.stackBalls     = [];
-        this.highScoreUser  = {name:'unknown',score:0};
+        this.userScore  = {name:'unknown',score:0};
         canvas.addEventListener("click",(event)=>{
             let rect = canvas.getBoundingClientRect();  
             this.mousePosition =  {
@@ -41,8 +41,8 @@ class Game{
                                 let name = data.val().name||'unknown';
                                 if(name.length>8)
                                     name = name.substr(0,8)+"...";
-                                root.highScoreUser.name = name;
-                                root.highScoreUser.score = data.val().score;
+                                root.userScore.name = name;
+                                root.userScore.score = data.val().score;
                 });
         }catch(ex){
             console.log("Error connect to firebase");
@@ -405,7 +405,7 @@ class Game{
         context.font = "bolder 20px Arial"
         context.fillStyle = "#888888"
         context.textAlign = 'center';
-        context.fillText(root.highScoreUser.name+':'+root.highScoreUser.score ,canvas.width*3/4,40,canvas.width/2,20);
+        context.fillText(root.userScore.name+':'+root.userScore.score ,canvas.width*3/4,40,canvas.width/2,20);
         context.fillText("You : "+this.score,canvas.width*3/4,70,canvas.width/2,225);
         context.restore();
         context.save();
@@ -492,11 +492,9 @@ class Game{
 
         }
         if(this.gameState == this.GAME.EXIT){
-            if(this.score>=this.highScoreUser.score){
-                let name = prompt("Ten cua ban?");
+                let name = prompt("Tên của bạn là gì?");
                 database.ref('scoretable/').set({name:name,score:this.score});
                     //Back to menu scene
-                }
             scene = new MenuScene();
         }
 
